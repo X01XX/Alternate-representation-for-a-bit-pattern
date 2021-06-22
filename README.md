@@ -5,7 +5,7 @@ A bit pattern, like 0101, represents a number, 5.  It is assumed that zeros on t
 
 The infinity of zeros is easy to ignore in most cases, however a NOT operation turns them into an infinity of ones.  The infinity of ones may be useful in some cases, not in others.
 
-Another way to represent 5 is by using two masks, a Ones-mask: 0101, and a Zeros-mask: 1010.
+Another way to represent the number 5 is by using two masks, a Ones-mask: 0101, and a Zeros-mask: 1010.
 
 By doing a bitwize OR operation on the two masks, we get a "position mask", 1111.
 
