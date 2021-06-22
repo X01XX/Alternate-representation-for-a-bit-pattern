@@ -3,7 +3,7 @@ An alternate way of representing a bit pattern, with some interesting consequenc
 
 A bit pattern, like 0101, represents a number, 5.  It is assumed that zeros on the left go off to infinity, or at least to the end of the register, word, integer, etc.
 
-The infinity of zeros is easy to ignore in most cases, however a NOT operation turns them into an infinity of ones.
+The infinity of zeros is easy to ignore in most cases, however a NOT operation turns them into an infinity of ones.  The infinity of ones may be useful in some cases, not in others.
 
 Another way to represent 5 is by using two masks, a Ones-mask: 0101, and a Zeros-mask: 1010.
 
