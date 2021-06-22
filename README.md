@@ -21,3 +21,7 @@ The result is a representation of the bit pattern 0100, with position mask 1111.
 
 To do an OR operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is 0101 + 1100 = 1101.  Zeros-mask is 1010 & 0011 = 0010.
 The result is a representation of the bit pattern 1101, with position mask 1111.
+
+To do an XOR operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is (0101 ^ 1010) & 1111 = 1001.  Zeros-mask is ~1001 & 1111 = 0110.
+The result is a representation of the bit pattern 1001, with position mask 1111.
+This operation will not work for bit patterns where a one is allowed to be in the sampe position of both masks.
