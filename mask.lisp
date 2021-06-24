@@ -22,9 +22,20 @@
 
 ;; Print a mask instance
 (defmethod mask-print ((msk mask))
-    (format t "~B" (mask-ones msk))
-)
+    (format t "~B" (mask-ones msk)))
 
+(defmethod mask-and ((msk1 mask) (msk2 mask))
+    (make-instance 'mask :ones (logand (mask-ones msk1) (mask-ones msk2))))
+
+(defmethod mask-or ((msk1 mask) (msk2 mask))
+    (make-instance 'mask :ones (logior (mask-ones msk1) (mask-ones msk2))))
+
+(defmethod mask-xor ((msk1 mask) (msk2 mask))
+    (make-instance 'mask :ones (logxor (mask-ones msk1) (mask-ones msk2))))
+
+(defmethod mask-not-equal ((msk1 mask) (msk2 mask))
+    (/= (mask-ones msk1) (mask-ones msk2)))
+ 
 ; Test code
 ; (setf msk1 (make-instance 'mask :ones 6))
 ; (mask-print msk1)
