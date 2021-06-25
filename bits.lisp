@@ -17,13 +17,11 @@
     (unless (and ones-supplied zeros-supplied)
         (error "bits initialize-instance: must provide :bit-ones <mask> :bits-zeros <mask>"))
 
-    (when (and ones-supplied zeros-supplied)
-
-        (unless (and (eq (type-of ones) 'MASK) (eq (type-of zeros) 'MASK))
+    (unless (and (eq (type-of ones) 'MASK) (eq (type-of zeros) 'MASK))
            (error "bits initialize-instance: must provide :bit-ones <mask> :bits-zeros <mask>"))
 
-        (setf (bits-ones  bits-instance) ones)
-        (setf (bits-zeros bits-instance) zeros)))
+    (setf (bits-ones  bits-instance) ones)
+    (setf (bits-zeros bits-instance) zeros))
 
 ;;; Return true if a Bits instance has any X bit positions
 (defmethod any-x ((bits-instance bits))
