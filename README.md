@@ -9,7 +9,7 @@ Another way to represent the number 5 is by using two masks, a Ones-mask: 0101, 
 
 By doing a bitwize OR operation on the two masks, we get a "position mask", 1111.
 
-The position mask indicates that we are dealing with four contiguous bits.  The position mask bits need not be contiguous, there could be a zero in the same position of both masks. Operations on bit patterns of this sort require the bit patterns have the same position mask, with the result having the same position mask.
+The position mask indicates that we are dealing with four contiguous bits.  The position mask bits need not be contiguous, there could be a zero in the same position of both masks, in between the ones in the position mask. Operations on bit patterns of this sort require the bit patterns have the same position mask, with the result having the same position mask.
 
 Some might be put off by the apparent inefficiency of representing a bit pattern with two masks.  If you allow for a 1 bit in the same position of both masks, you can represent a power of two bit patterns.  This use can be thought of as a region on a Karnaugh Map (having 1 or 2 bits per axis, no more).  So if we have Ones-mask: 1010 and Zeros-mask: 0111, that can be thought of as the bit pattern 10X0, representing the bit patterns 1000 and 1010.  With two X-bit positions, four bit patterns will be represented.
 
