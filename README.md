@@ -31,5 +31,5 @@ This operation will not work for bit patterns with an X bit position.
 
 To do a Union operation, calculate the OR of each corresponding mask pair.
 
-To do an intersection operation, the bit patterns must intersect, then calculate the AND of each corresponding mask pair.
+To do an Intersection operation, the bit patterns must intersect, then calculate the AND of each corresponding mask pair.
 
