@@ -13,19 +13,19 @@ The position mask indicates that we are dealing with four contiguous bits.  The 
 
 Some might be put off by the apparent inefficiency of representing a bit pattern with two masks.  If you allow for a 1 bit in the same position of both masks, you can represent a power of two bit patterns.  This use can be thought of as a region on a Karnaugh Map (having 1 or 2 bits per axis, no more).  So if we have Ones-mask: 1010 and Zeros-mask: 0111, that can be thought of as the bit pattern 10X0, representing the bit patterns 1000 and 1010.  With two X-bit positions, four bit patterns will be represented.
 
-To do a bitwise NOT operation on the bit pattern 0101, the result Ones-mask is, ~0101 & 1111 = 1010, the result Zeros-mask is ~1010 & 1111 = 0101.
+To do a bitwise NOT operation on the bit pattern 0101, the result Ones-mask is, 0101 ^ 1111 = 1010, the result Zeros-mask is 1010 ^ 1111 = 0101.
 The result is a representation of the bit pattern 1010, with position mask 1111.
 This operation will not work for bit patterns with an X bit position.
 
-To do a bitwise AND operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is 0101 & 1100 = 0100.  Zeros-mask is 1010 + 0011 = 1011.
+To do a bitwise AND operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is 0101 & 1100 = 0100.  Zeros-mask is 0100 ^ 1111 = 1011.
 The result is a representation of the bit pattern 0100, with position mask 1111.
 This operation will not work for bit patterns with an X bit position.
 
-To do a bitwise OR operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is 0101 + 1100 = 1101.  Zeros-mask is 1010 & 0011 = 0010.
+To do a bitwise OR operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is 0101 + 1100 = 1101.  Zeros-mask is 1101 ^ 1111 = 0010.
 The result is a representation of the bit pattern 1101, with position mask 1111.
 This operation will not work for bit patterns with an X bit position.
 
-To do a bitwise XOR operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is (0101 ^ 1010) & 1111 = 1001.  Zeros-mask is ~1001 & 1111 = 0110.
+To do a bitwise XOR operation on 0101 (1s: 0101, 0s: 1010) and 1100 (1s: 1100, 0s: 0011), Ones-mask is 0101 ^ 1100 = 1001.  Zeros-mask is 1001 ^ 1111 = 0110.
 The result is a representation of the bit pattern 1001, with position mask 1111.
 This operation will not work for bit patterns with an X bit position.
 
@@ -33,3 +33,4 @@ To do a Union operation, calculate the OR of each corresponding mask pair.
 
 To do an Intersection operation, the bit patterns must intersect, then calculate the AND of each corresponding mask pair.
 
+Bit patterns intersect if 0 = (1-maskA ^ 1-maskB) & (0-maskA ^ 0-maskB).
