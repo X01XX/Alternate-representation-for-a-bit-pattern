@@ -36,3 +36,5 @@ To do an Intersection operation, the bit patterns must intersect, then calculate
 Bit patterns intersect if 0 = (1-maskA ^ 1-maskB) & (0-maskA ^ 0-maskB).
 
 Bit patterns are adjacent if the above calculation results in a power of 2, that is 1 bit. The result is > 0, and (result - 1) & result = 0.
+
+Bit patterns can be considered to have a "distance" equal to the number of times the "(result - 1) & result" calculation can be done, until zero is reached. 
