@@ -34,3 +34,5 @@ To do a Union operation, calculate the OR of each corresponding mask pair.
 To do an Intersection operation, the bit patterns must intersect, then calculate the AND of each corresponding mask pair.
 
 Bit patterns intersect if 0 = (1-maskA ^ 1-maskB) & (0-maskA ^ 0-maskB).
+
+Bit patterns are adjacent if the above calculation results in a power of 2, that is 1 bit. The result is > 0, and (result - 1) & result = 0.
