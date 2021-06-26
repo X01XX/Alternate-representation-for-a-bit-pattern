@@ -13,12 +13,10 @@
     (unless ones-supplied
         (error "mask initialize-instance: must provide :ones <number>"))
 
-    (when ones-supplied
+    (unless (numberp ones)
+        (error "mask initialize-instance: must provide :ones <number>"))
 
-        (unless (numberp ones)
-            (error "mask initialize-instance: must provide :ones <number>"))
-
-        (setf (mask-ones msk) ones)))
+    (setf (mask-ones msk) ones))
 
 ;;; Print a Mask object
 (defmethod mask-print ((msk mask))
@@ -39,4 +37,8 @@
 ;;; Return True if two masks are equal
 (defmethod mask-equalp ((msk1 mask) (msk2 mask))
     (= (mask-ones msk1) (mask-ones msk2)))
+
+;;; Return true if a mask is zero
+(defmethod mask-zerop ((msk1 mask))
+    (zerop (mask-ones msk1)))
 
