@@ -34,10 +34,12 @@
 ;;; Print a Bits object
 (defmethod bits-print ((bits-instance bits))
     ;; Get a mask of the bit positions
-    (setf bit-positions (mask-ones (position-mask bits-instance)))
+    (let ((bit-positions (mask-ones (position-mask bits-instance)))
 
-    ;; Split single bit positions from the position mask
-    (setf position-masks nil)
+          ;; Split single bit positions from the position mask
+          (position-masks nil)
+          (anum1 0) (anum0 0))
+          
     (loop while (> bit-positions 0) do
     
         (setf previous-positions bit-positions)
@@ -58,99 +60,99 @@
              (t (printc "?")))
 
        ;; Discard bit position mask that was just processed
-       (setf position-masks (cdr position-masks))))
+       (setf position-masks (cdr position-masks)))))
 
 ;;; Return the bitwise NOT of two Bits
 (defmethod bits-not ((bits-instance bits))
 
     (if (any-x bits-instance) (error "bits-not X-bit detected in bits-instance"))
 
-    (setf bit-positions (position-mask bits-instance))
+    (let ((bit-positions (position-mask bits-instance)))
 
     (make-instance 'bits :bits-ones  (mask-xor (bits-ones  bits-instance) bit-positions)
-                         :bits-zeros (mask-xor (bits-zeros bits-instance) bit-positions)))
+                         :bits-zeros (mask-xor (bits-zeros bits-instance) bit-positions))))
 
 ;;; Return true if two Bits intersect
 (defmethod bits-intersectp ((bits-in1 bits) (bits-in2 bits))
 
-    (setf bit-positions1 (position-mask bits-in1))
-    (setf bit-positions2 (position-mask bits-in2))
-    
-    (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-intersect: incompatible bits arguments"))
-    
-    (zerop (mask-ones (mask-and (mask-xor (bits-ones bits-in1) (bits-ones bits-in2)) (mask-xor (bits-zeros bits-in1) (bits-zeros bits-in2))))))
+    (let ((bit-positions1 (position-mask bits-in1))
+          (bit-positions2 (position-mask bits-in2)))
+
+        (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-intersect: incompatible bits arguments"))
+
+        (zerop (mask-ones (mask-and (mask-xor (bits-ones bits-in1) (bits-ones bits-in2)) (mask-xor (bits-zeros bits-in1) (bits-zeros bits-in2)))))))
 
 ;;; Return the intersection of two Bits
 (defmethod bits-intersection ((bits-in1 bits) (bits-in2 bits))
 
-    (setf bit-positions1 (position-mask bits-in1))
-    (setf bit-positions2 (position-mask bits-in2))
+    (let ((bit-positions1 (position-mask bits-in1))
+          (bit-positions2 (position-mask bits-in2)))
 
-    (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-intersection: incompatible bits arguments"))
+        (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-intersection: incompatible bits arguments"))
 
-    (unless (bits-intersectp bits-in1 bits-in2) (error "bits-intersection: arguments don't intersect"))
-    
-    (make-instance 'bits :bits-ones  (mask-and (bits-ones  bits-in1) (bits-ones  bits-in2))
-                         :bits-zeros (mask-and (bits-zeros bits-in1) (bits-zeros bits-in2))))
+        (unless (bits-intersectp bits-in1 bits-in2) (error "bits-intersection: arguments don't intersect"))
+
+        (make-instance 'bits :bits-ones  (mask-and (bits-ones  bits-in1) (bits-ones  bits-in2))
+                             :bits-zeros (mask-and (bits-zeros bits-in1) (bits-zeros bits-in2)))))
 
 ;;; Return the union of two Bits
 (defmethod bits-union ((bits-in1 bits) (bits-in2 bits))
 
-    (setf bit-positions1 (position-mask bits-in1))
-    (setf bit-positions2 (position-mask bits-in2))
+    (let ((bit-positions1 (position-mask bits-in1))
+          (bit-positions2 (position-mask bits-in2)))
 
-    (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-union: incompatible bits arguments"))
+        (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-union: incompatible bits arguments"))
 
-    (make-instance 'bits :bits-ones  (mask-or (bits-ones  bits-in1) (bits-ones  bits-in2))
-                         :bits-zeros (mask-or (bits-zeros bits-in1) (bits-zeros bits-in2))))
+        (make-instance 'bits :bits-ones  (mask-or (bits-ones  bits-in1) (bits-ones  bits-in2))
+                             :bits-zeros (mask-or (bits-zeros bits-in1) (bits-zeros bits-in2)))))
 
 ;;; Return the bitwise AND of two Bits
 (defmethod bits-and ((bits-in1 bits) (bits-in2 bits))
 
-    (setf bit-positions1 (position-mask bits-in1))
-    (setf bit-positions2 (position-mask bits-in2))
+    (let ((bit-positions1 (position-mask bits-in1))
+          (bit-positions2 (position-mask bits-in2)) (ones 0))
     
-    (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-and: incompatible bits arguments"))
+        (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-and: incompatible bits arguments"))
 
-    (if  (any-x bits-in1) (error "bits-and: first argument contains and X bit position"))
-    (if  (any-x bits-in2) (error "bits-and: second argument contains and X bit position"))
+        (if  (any-x bits-in1) (error "bits-and: first argument contains and X bit position"))
+        (if  (any-x bits-in2) (error "bits-and: second argument contains and X bit position"))
 
-    (setf ones (mask-and (bits-ones  bits-in1) (bits-ones  bits-in2)))
+        (setf ones (mask-and (bits-ones  bits-in1) (bits-ones  bits-in2)))
 
-    (make-instance 'bits :bits-ones  ones
-                         :bits-zeros (mask-xor ones bit-positions1)))
+        (make-instance 'bits :bits-ones  ones
+                             :bits-zeros (mask-xor ones bit-positions1))))
 
 ;;; Return the bitwise OR of two Bits
 (defmethod bits-or ((bits-in1 bits) (bits-in2 bits))
 
-    (setf bit-positions1 (position-mask bits-in1))
-    (setf bit-positions2 (position-mask bits-in2))
+    (let ((bit-positions1 (position-mask bits-in1))
+          (bit-positions2 (position-mask bits-in2)) (ones 0))
     
-    (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-or: incompatible bits arguments"))
+        (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-or: incompatible bits arguments"))
 
-    (if  (any-x bits-in1) (error "bits-or: first argument contains and X bit position"))
-    (if  (any-x bits-in2) (error "bits-or: second argument contains and X bit position"))
+        (if  (any-x bits-in1) (error "bits-or: first argument contains and X bit position"))
+        (if  (any-x bits-in2) (error "bits-or: second argument contains and X bit position"))
 
-    (setf ones (mask-or (bits-ones  bits-in1) (bits-ones  bits-in2)))
+        (setf ones (mask-or (bits-ones  bits-in1) (bits-ones  bits-in2)))
 
-    (make-instance 'bits :bits-ones  ones
-                         :bits-zeros (mask-xor ones bit-positions1)))
+        (make-instance 'bits :bits-ones  ones
+                             :bits-zeros (mask-xor ones bit-positions1))))
 
 ;;; Return the bitwise XOR of two Bits
 (defmethod bits-xor ((bits-in1 bits) (bits-in2 bits))
 
-    (setf bit-positions1 (position-mask bits-in1))
-    (setf bit-positions2 (position-mask bits-in2))
+    (let ((bit-positions1 (position-mask bits-in1))
+          (bit-positions2 (position-mask bits-in2)) (ones 0))
     
-    (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-or: incompatible bits arguments"))
+        (unless (mask-equalp bit-positions1 bit-positions2) (error "bits-or: incompatible bits arguments"))
 
-    (if  (any-x bits-in1) (error "bits-or: first argument contains and X bit position"))
-    (if  (any-x bits-in2) (error "bits-or: second argument contains and X bit position"))
+        (if  (any-x bits-in1) (error "bits-or: first argument contains and X bit position"))
+        (if  (any-x bits-in2) (error "bits-or: second argument contains and X bit position"))
 
-    (setf ones (mask-xor (bits-ones  bits-in1) (bits-ones  bits-in2)))
+        (setf ones (mask-xor (bits-ones  bits-in1) (bits-ones  bits-in2)))
 
-    (make-instance 'bits :bits-ones  ones
-                         :bits-zeros (mask-xor ones bit-positions1)))
+        (make-instance 'bits :bits-ones  ones
+                             :bits-zeros (mask-xor ones bit-positions1))))
 
 
 ; Test code
