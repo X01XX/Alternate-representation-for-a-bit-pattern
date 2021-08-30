@@ -1,5 +1,7 @@
 ;;;; Implement a Bits class, where a bits object is made up of a ones mask and a zeros mask.
 
+;;;; Run with clisp bits.lisp
+
 (load 'mask.lisp)
 
 ;;; Define the Bits class
@@ -62,15 +64,13 @@
        ;; Discard bit position mask that was just processed
        (setf position-masks (cdr position-masks)))))
 
-;;; Return the bitwise NOT of two Bits
+;;; Return the bitwise NOT of a bits instance
 (defmethod bits-not ((bits-instance bits))
 
     (if (any-x bits-instance) (error "bits-not X-bit detected in bits-instance"))
 
-    (let ((bit-positions (position-mask bits-instance)))
-
-    (make-instance 'bits :bits-ones  (mask-xor (bits-ones  bits-instance) bit-positions)
-                         :bits-zeros (mask-xor (bits-zeros bits-instance) bit-positions))))
+    (make-instance 'bits :bits-ones  (bits-zeros  bits-instance)
+                         :bits-zeros (bits-ones   bits-instance)))
 
 ;;; Return true if two Bits intersect
 (defmethod bits-intersectp ((bits-in1 bits) (bits-in2 bits))
@@ -154,8 +154,10 @@
         (make-instance 'bits :bits-ones  ones
                              :bits-zeros (mask-xor ones bit-positions1))))
 
-
 ; Test code
+
+(format t "~&bits_test.lisp")
+
 (setf bits-instance1 (make-instance 'bits :bits-ones  (make-instance 'mask :ones 7)
                                           :bits-zeros (make-instance 'mask :ones 9)))
 ; ones mask      0111
