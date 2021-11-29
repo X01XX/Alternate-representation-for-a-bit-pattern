@@ -9,9 +9,9 @@ Another way to represent the number 5 is by using two masks, a Ones-mask: 0101, 
 
 By doing a bitwize OR operation on the two masks, we get a "position mask", 1111.
 
-The position mask indicates that we are dealing with four contiguous bits.  The position mask bits need not be contiguous, there could be a zero in the same position of both masks, in between the ones in the position mask. Operations on bit patterns of this sort require the bit patterns have the same position mask, with the result having the same position mask.
+The position mask indicates that we are dealing with four contiguous bits. Operations on bit patterns of this sort require the bit patterns have the same position mask, with the result having the same position mask. The position mask bits need not be contiguous.
 
-Some might be put off by the apparent inefficiency of representing a bit pattern with two masks.  If you allow for a 1 bit in the same position of both masks, you can represent a power of two bit patterns.  This use can be thought of as a region on a Karnaugh Map (having 1 or 2 bits per axis, no more).  So if we have Ones-mask: 1010 and Zeros-mask: 0111, that can be thought of as the bit pattern 10X0, representing the bit patterns 1000 and 1010.  With two X-bit positions, four bit patterns will be represented.
+Some might be put off by the apparent inefficiency of representing a bit pattern with two masks.  If you allow for a 1 bit in the same position of both masks, you can represent a power of two bit patterns.  This use can be thought of as a region on a Karnaugh Map (modified, any two bit patterns differing by one bit are adjacent. You may not be able to draw it on a two dimensional piece of paper, but it exists).  So if we have Ones-mask: 1010 and Zeros-mask: 0111, that can be thought of as the bit pattern 10X0, representing the bit patterns 1000 and 1010.  With two X-bit positions, four bit patterns will be represented.
 
 To do a bitwise NOT operation on the bit pattern 0101, the result Ones-mask is, 0101 ^ 1111 = 1010, the result Zeros-mask is 1010 ^ 1111 = 0101.
 The result is a representation of the bit pattern 1010, with position mask 1111.
@@ -31,9 +31,9 @@ This operation will not work for bit patterns with an X bit position.
 
 To do a Union operation, calculate the OR of each corresponding mask pair.
 
-To do an Intersection operation, the bit patterns must intersect, then calculate the AND of each corresponding mask pair.
+Bit patterns intersect if (1-maskA ^ 1-maskB) & (0-maskA ^ 0-maskB) = 0.
 
-Bit patterns intersect if 0 = (1-maskA ^ 1-maskB) & (0-maskA ^ 0-maskB).
+To do an Intersection operation, the bit patterns must intersect, then calculate the AND of each corresponding mask pair.
 
 Bit patterns are adjacent if the above calculation results in a power of 2, that is 1 bit. The result is > 0, and (result - 1) & result = 0.
 
